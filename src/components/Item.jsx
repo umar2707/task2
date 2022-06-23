@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import {mobile} from "../responsive"
 
@@ -23,7 +23,7 @@ const InnerText = styled.div`
     bottom: 60px;
 `
 const Category = styled.span`
-    background-color: #fff;
+    background-color: #ffffff;
     border-radius: 7px;
     border: none;
     text-align: center;
@@ -36,11 +36,15 @@ const Title = styled.h3`
     font-weight: bold;
     margin-top: 2rem;
 `
+const handleKeyDown = event => {
+   console.log(event);
+};
 
-const Item = ({imgUrl,title,category,filterCat}) => {
-    
+const Item = ({imgUrl,title,category,filterCat,returnedId,id}) => {
+    const [active,setActive] = useState(false);
+
   return (
-    <Items>
+    <Items onClick={()=>setActive(active ? false : true)} onKeyDown={handleKeyDown} style={{border: active && '2px solid #43ee0f'}}>
       <Imagee src={imgUrl} />
         <InnerText>
             <Category value={category} onClick={()=>filterCat(category)}>{category}</Category>

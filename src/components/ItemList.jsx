@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { items, category } from '../data'
 import Item from './Item'
 import styled from 'styled-components'
-import {mobile} from "../responsive"
+import { mobile } from "../responsive"
 
 const ItemListt = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    ${mobile({gridTemplateColumns:'repeat(1,1fr)'})};
+    ${mobile({ gridTemplateColumns: 'repeat(1,1fr)' })};
 `
 const Container = styled.div`
     width: 1170px;
@@ -26,7 +26,7 @@ const Menu = styled.ul`
     justify-content: center;
     margin-bottom: 2rem;
     border-radius: 5px;
-    ${mobile({flexDirection:'column',backgroundColor:'#fff' ,width:'92%', marginTop:'90px',padding:'5px 0',position:'absolute', zIndex:'300',display:'none'})};
+    ${mobile({ flexDirection: 'column', backgroundColor: '#fff', width: '92%', marginTop: '90px', padding: '5px 0', position: 'absolute', zIndex: '300', display: 'none' })};
 
 `
 const MenuItem = styled.li`
@@ -51,11 +51,11 @@ const LeadMore = styled.button`
     margin: 5rem;
     cursor: pointer;
     font-size: 15px;
-    ${mobile({margin:'30px'})};
+    ${mobile({ margin: '30px' })};
 `
 const Dropdown = styled.input`
     display: none;
-    ${mobile({display:'block'})};
+    ${mobile({ display: 'block' })};
     width: 100%;
     padding: 15px 20px;
     margin: 2rem 0;
@@ -76,40 +76,58 @@ const Arrow = styled.div`
     border-right: 2px solid #fff;
     transform: rotate(-45deg);
 `
+    
 
 const ItemList = () => {
-    const [categ,setCateg] = useState('')
-    const [showCat,setShowCat] = useState(false)
-    const [item,setItem] = useState([]);
+    const [categ, setCateg] = useState('Show All')
+    const [item, setItem] = useState([]);
+    const [active, setActive] = useState(null);
 
-    useEffect(()=>{
-        setItem(items);
-    },[])
+    
 
-    const filterCat=(a)=>{
-        setItem(items.filter((item)=>item.category === `${a}`))
+    const returnedId = (it,e)=>{
+        console.log(it);
+        const key = e.key
+        //setItem(items.filter((item)=>item.id !== it))
     }
-    const handleCat2=(a,i)=>{
-        if(a[i] === 'Show All'){
+
+    useEffect(() => {
+        setItem(items);
+    }, [])
+
+    const filterCat = (a) => {
+        setItem(items.filter((item) => item.category === `${a}`))
+    }
+
+    const handleCat2 = (a, i) => {
+        if (a[i] === 'Show All') {
             setItem(items);
-        }else{
+        } else {
             const b = a[i];
-            setItem(items.filter((item)=>item.category === `${b}`))
+            setItem(items.filter((item) => item.category === `${b}`))
         }
+        setCateg(a[i]);
+    }
+
+    const handleAdd = () => {
+        let b = [...item]
+        let c = [...item]
+        let d = b.concat(c);
+        setItem(d);
     }
     return (
         <Container>
-            <Dropdown value={category[categ]}  readOnly/>
+            <Dropdown value={categ} readOnly />
             <Arrow />
-            <Menu ds={showCat}>
-                {category.map((cat,i)=>(<MenuItem key={i} onClick={()=>handleCat2(category,i)}>{cat}</MenuItem>))}
+            <Menu >
+                {category.map((cat, i) => (<MenuItem key={i} onClick={() => handleCat2(category, i)}>{cat}</MenuItem>))}
             </Menu>
             <ItemListt>
-                {item?.map((item) => (
-                    <Item imgUrl={item.imgUrl} title={item.title} category={item.category} key={item.id} filterCat={filterCat} />
+                {item?.map((item, i) => (
+                    <Item id={item.id} imgUrl={item.imgUrl} title={item.title} category={item.category} key={i} filterCat={filterCat} returnedId={returnedId}/>
                 ))}
             </ItemListt>
-            <LeadMore>LOAD MORE</LeadMore>
+            <LeadMore onClick={handleAdd}>LOAD MORE</LeadMore>
         </Container>
     )
 }
