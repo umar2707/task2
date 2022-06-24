@@ -26,8 +26,10 @@ const Menu = styled.ul`
     justify-content: center;
     margin-bottom: 2rem;
     border-radius: 5px;
-    ${mobile({ flexDirection: 'column', backgroundColor: '#fff', width: '92%', marginTop: '90px', padding: '5px 0', position: 'absolute', zIndex: '300', display: 'none' })};
-
+    ${mobile({ flexDirection: 'column', backgroundColor: '#fff', width: '92%', marginTop: '90px', padding: '5px 0', position: 'absolute', zIndex: '300', display:'none'})};
+    &.active_nav{
+        display: flex;
+    }
 `
 const MenuItem = styled.li`
     color: #391400;
@@ -63,6 +65,7 @@ const Dropdown = styled.input`
     border-radius: 7px;
     outline: none;
     position: relative;
+    cursor: pointer;
 `
 const Arrow = styled.div`
     position: absolute;
@@ -75,19 +78,22 @@ const Arrow = styled.div`
     border-top: 2px solid #fff;
     border-right: 2px solid #fff;
     transform: rotate(-45deg);
+    display: none;
+    ${mobile({ display:'block' })};
 `
     
 
 const ItemList = () => {
     const [categ, setCateg] = useState('Show All')
     const [item, setItem] = useState([]);
-    const [active, setActive] = useState(null);
+    const navRef = useRef();
 
+    const showNav = ()=>{
+        navRef.current.classList.toggle('active_nav')
+    }
     
-
     const returnedId = (it,e)=>{
         console.log(it);
-        const key = e.key
         //setItem(items.filter((item)=>item.id !== it))
     }
 
@@ -108,19 +114,31 @@ const ItemList = () => {
         }
         setCateg(a[i]);
     }
-
     const handleAdd = () => {
         let b = [...item]
         let c = [...item]
         let d = b.concat(c);
         setItem(d);
     }
+
     return (
         <Container>
-            <Dropdown value={categ} readOnly />
+            <Dropdown 
+                value={categ} 
+                readOnly 
+                onClick={showNav}
+            />
             <Arrow />
-            <Menu >
-                {category.map((cat, i) => (<MenuItem key={i} onClick={() => handleCat2(category, i)}>{cat}</MenuItem>))}
+            <Menu 
+                className='menu'
+                ref={navRef}
+            >
+                {category.map((cat, i) => (
+                    <MenuItem 
+                        key={i} 
+                        onClick={() => handleCat2(category, i)}>{cat}
+                    </MenuItem>
+                ))}
             </Menu>
             <ItemListt>
                 {item?.map((item, i) => (
