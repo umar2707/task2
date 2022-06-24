@@ -81,11 +81,27 @@ const Arrow = styled.div`
     display: none;
     ${mobile({ display:'block' })};
 `
+function useKey (key,cb){
+    const callbackRef = useRef(cb);
+    useEffect(()=>{
+        callbackRef.current = cb
+    })
+    useEffect(()=>{
+        function handle(event){
+            if(event.code === key){
+                callbackRef.current(event)
+            }
+        }
+        document.addEventListener('keypress',handle);
+        return ()=> document.removeEventListener("keypress",handle)
+    },[key])
+}
     
 
 const ItemList = () => {
     const [categ, setCateg] = useState('Show All')
     const [item, setItem] = useState([]);
+    const [select, setSelected] = useState(null)
     const navRef = useRef();
 
     const showNav = ()=>{
@@ -93,10 +109,18 @@ const ItemList = () => {
     }
     
     const returnedId = (it,e)=>{
-        console.log(it);
-        //setItem(items.filter((item)=>item.id !== it))
+        setSelected(it)
     }
-
+    
+    //for delete item usekey delete
+    function handleKeyDelete () {
+        const id = select
+        if(typeof id === 'number'){
+            setItem(item.filter((item)=>item.id !== id));
+            console.log('delete button working');
+        }
+    }
+    useKey('KeyD',handleKeyDelete);
     useEffect(() => {
         setItem(items);
     }, [])
@@ -120,7 +144,7 @@ const ItemList = () => {
         let d = b.concat(c);
         setItem(d);
     }
-
+    console.log(select);
     return (
         <Container>
             <Dropdown 
@@ -142,7 +166,7 @@ const ItemList = () => {
             </Menu>
             <ItemListt>
                 {item?.map((item, i) => (
-                    <Item id={item.id} imgUrl={item.imgUrl} title={item.title} category={item.category} key={i} filterCat={filterCat} returnedId={returnedId}/>
+                    <Item  id={item.id} imgUrl={item.imgUrl} title={item.title} category={item.category} key={i} filterCat={filterCat} returnedId={returnedId}/>
                 ))}
             </ItemListt>
             <LeadMore onClick={handleAdd}>LOAD MORE</LeadMore>

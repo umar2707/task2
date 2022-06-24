@@ -9,55 +9,55 @@ import img8 from "./img/8.jpg";
 import img9 from "./img/9.jpg";
 export const items = [
   {
-    id: 1,
+    id: 0,
     category: "Design",
     imgUrl: img1,
     title:'SOFA'
   },
   {
-    id: 2,
+    id: 1,
     category: "Branding",
     imgUrl: img2,
     title:'KeyBoard'
   },
   {
-    id: 3,
+    id: 2,
     category: "Illustration",
     imgUrl: img3,
     title:'Work Media'
   },
   {
-    id: 4,
+    id: 3,
     category: "Motion",
     imgUrl: img4,
     title:'DDDone'
   },
   {
-    id: 5,
+    id: 4,
     category: "Design",
     imgUrl: img5,
     title:'Abstract'
   },
   {
-    id: 6,
+    id: 5,
     category: "Branding",
     imgUrl: img6,
     title:'HandP'
   },
   {
-    id: 7,
+    id: 6,
     category: "Motion",
     imgUrl: img7,
     title:'Architect'
   },
   {
-    id: 8,
+    id: 7,
     category: "Design",
     imgUrl: img8,
     title:'CalC'
   },
   {
-    id: 9,
+    id: 8,
     category: "Branding",
     imgUrl: img9,
     title:'Sport'

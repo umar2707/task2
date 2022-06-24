@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import {mobile} from "../responsive"
 
@@ -6,10 +6,13 @@ const Items = styled.div`
     width: 370px;
     height: 416px;
     position: relative;
-    border-radius: 7px;
+    border-radius: 10px;
     overflow: hidden;
     ${mobile({width:'329px'})};
-    border: 2px solid transparent;
+    border: 3px solid transparent;
+    &.active{
+        border: 3px solid #4FE24A
+    }
 `
 const Imagee = styled.img`
     width: 370px;
@@ -36,15 +39,20 @@ const Title = styled.h3`
     font-weight: bold;
     margin-top: 2rem;
 `
-const handleKeyDown = event => {
-   console.log(event);
-};
 
 const Item = ({imgUrl,title,category,filterCat,returnedId,id}) => {
-    const [active,setActive] = useState(false);
+    const selectRef = useRef();
+
+    const handleSelect = (id) =>{
+        returnedId(id);
+        selectRef.current.classList.toggle('active')
+    }
 
   return (
-    <Items onClick={()=>setActive(active ? false : true)} onKeyDown={handleKeyDown} style={{border: active && '2px solid #43ee0f'}}>
+    <Items 
+        ref={selectRef}
+        onClick={()=>handleSelect(id)}
+    >
       <Imagee src={imgUrl} />
         <InnerText>
             <Category value={category} onClick={()=>filterCat(category)}>{category}</Category>
